@@ -92,3 +92,8 @@ sudo service apache2 reload
 
 ## Finished! 
 Congratulations! You now have a custom domain and working website! To upload files to the server, download a File-Transfer Protocol (FTP) client like [Cyberduck](https://cyberduck.io/). Enter `YOURDOMAIN` as the server, `pi` as the username, `password` (or whatever you changed the password to) as the password, and use SFTP port 22. 
+
+Other tutorials: 
+* [Install SSL certificates using LetsEncrypt](http://pimylifeup.com/raspberry-pi-ssl-lets-encrypt/)
+* [Install a OpenVPN server on your Pi](https://www.youtube.com/watch?v=WA7QTM9hovQ) (video)
+* [Install a OwnCloud cloud server](https://www.youtube.com/watch?v=RNehg6AKCiM) (video)
