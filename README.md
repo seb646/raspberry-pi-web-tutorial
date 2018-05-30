@@ -1,8 +1,8 @@
-# Setup a Raspberry Pi Web Server
+# Tutorial: Setup a Raspberry Pi Web Server
 This guide will show you how to setup a [Raspberry Pi](https://www.raspberrypi.org/) web server on your home network! Here is a [list of materials](http://a.co/c5fqu6n) needed for this tutorial. 
 
 
-## Step 1: Raspberry Pi Configuration
+## Step 1: Raspbian Installation & Configuration
 The first step in this tutorial is to flash Raspberry Pi's version of Linux onto an SD card. This is where all of our data will be kept, and where the hardware will look to for operating commands. In order to do this, you need to download an application called Etcher (Windows and MacOS). Once you've downloaded [Etcher](https://etcher.io/), you'll also need to download [Raspbian Stretch Lite](https://www.raspberrypi.org/downloads/raspbian/).
 
 The next step is to plug your SD card into your computer and open up Etcher. Select the Raspbian .img file your downloaded from the Raspberry Pi website as the image. For the drive, select the SD card you just plugged in. Then click "Flash!" and wait for the process to complete.
@@ -24,7 +24,7 @@ sudo apt-get update
 sudo apt-get upgrade
 ```
 
-## Step 2: Install Apache & PHP
+## Step 2: Installation of Apache & PHP
 To install the Apache web server and PHP, type `sudo apt-get install apache2 php5` into your terminal and click enter. It will list out the packages it intends to download and install, and then it will ask you if you'd like to download all of the packages. Type in "y" for yes and click enter.
 
 Next, you'll want to change the ownership of the folders that contain your website's files. To do this, type:
@@ -34,8 +34,8 @@ sudo chgrp -R pi /var/www
 ```
 To check if Apache is working, go to your favorite web browser and type in "[http://pi.local](http://pi.local)" (or the IP address of your pi, if you know it). It should display a basic page with the title "Apache2 Debian Default Page." For future reference, the page you see is located in `/var/www/html/index.htm. Note: this page is only accessible on your local wifi network. We will explain how to make it accessible on the web in steps 3 and 4.
 
-## 3. Router Configuration
-The next step is to find the local IP address that your router assigned to your Raspberry Pi. To do this, we're going to use an application called [Angry IP Scanner](http://angryip.org/). Download the application, open it, and click the start button. This application will scan IP addresses in the range 10.0.1.0-255 by default, but if your router uses another format for subnet (172.16.X.X or 192.168.X.X) simply change the range. After scanning, locate the device with the hostname "pi.local" and note it's IP address and MAC address.
+## Step 3: Router Configuration
+The next step is to find the local IP address that your router assigned to your Raspberry Pi. To do this, we're going to use an application called [Angry IP Scanner](http://angryip.org/). Download the application, open it, and click the start button. This application will scan IP addresses in the range `10.0.1.0-255` by default, but if your router uses another format for subnet (`172.16.X.X` or `192.168.X.X`) simply change the range. After scanning, locate the device with the hostname "pi.local" and note it's IP address and MAC address.
 
 Then, open up your router's configuration. For the purpose of this tutorial, we'll be using Apple's Airport Utility. Click on your router and select the edit button. Enter your password and then find the "Network" tab.
 
@@ -90,5 +90,5 @@ sudo a2ensite YOURDOMAIN
 sudo service apache2 reload
 ```
 
-## Finished!
+## Finished! 
 Congratulations! You now have a custom domain and working website! To upload files to the server, download a File-Transfer Protocol (FTP) client like [Cyberduck](https://cyberduck.io/). Enter `YOURDOMAIN` as the server, `pi` as the username, `password` (or whatever you changed the password to) as the password, and use SFTP port 22. 
