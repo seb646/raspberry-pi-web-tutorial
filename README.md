@@ -1,23 +1,23 @@
-# Tutorial: Setup a Raspberry Pi Web Server
-This guide will show you how to setup a [Raspberry Pi](https://www.raspberrypi.org/) web server on your home network! Here is a [list of materials](http://a.co/c5fqu6n) needed for this tutorial. 
+# Tutorial: How to Setup a Raspberry Pi Web Server
+This guide will show you how to set up a [Raspberry Pi](https://www.raspberrypi.org/) web server on your home network! Here is a [list of materials](http://a.co/c5fqu6n) needed for this tutorial. 
 
 
 ## Step 1: Raspbian Installation & Configuration
-The first step in this tutorial is to flash Raspberry Pi's version of Linux onto an SD card. This is where all of our data will be kept, and where the hardware will look to for operating commands. In order to do this, you need to download an application called Etcher (Windows and MacOS). Once you've downloaded [Etcher](https://etcher.io/), you'll also need to download [Raspbian Stretch Lite](https://www.raspberrypi.org/downloads/raspbian/).
+The first step in this tutorial is to flash Raspberry Pi's version of Linux onto an SD card. You'll use this SD card to store your PI's operating system. The first thing you need is an application called Etcher](https://etcher.io/) (Windows and MacOS). After downloading Etcher, you also need to download [Raspbian Stretch Lite](https://www.raspberrypi.org/downloads/raspbian/).
 
-The next step is to plug your SD card into your computer and open up Etcher. Select the Raspbian .img file your downloaded from the Raspberry Pi website as the image. For the drive, select the SD card you just plugged in. Then click "Flash!" and wait for the process to complete.
+The next step is to plug your SD card into your computer and open up Etcher. Select the .img file downloaded from the Raspberry Pi website as the image you want to flash. For the drive, select the SD card you just plugged in. Then click "Flash!" and wait for the process to complete.
 
-Once the image is flashed on the drive, safely eject the SD card and plug it into your Raspberry Pi. You will then need a micro-USB cord and an ethernet cable to power the device and connect it to the internet.
+Once you finish flashing the OS onto the SD card, safely eject the SD card and plug it into your Raspberry Pi. You will then need a micro-USB cord and an ethernet cable to power the device and connect it to the internet.
 
-After you plug the ethernet cord into your router, open up Terminal and enter the following commands to connect to your Raspberry Pi: `ssh pi@pi.local 22`. The system should prompt you for a password, and the default password is "password".
+After you plug the ethernet cord into your router, open up your computer's Terminal application. Then enter the following commands to connect to your Raspberry Pi: `ssh pi@pi.local 22`. The system should prompt you for a password, which by default is "password."
 
-The next thing we need to do is configure the operating system itself. In the console, type sudo raspi-config and the following menu should pop up:
+The next thing you need to do is configure the operating system itself. In the console, type `sudo raspi-config` and the following menu should pop up:
 
 ![Raspberry Pi Config](http://seb646.com/assets/terminal.png)
 
-This menu allows you to change the password of your Pi (recommended), as well as make other configuration changes. Go into "Advanced Options" and select "Expand Filesystem." Once this is done, the Pi may reboot itself. If it does, simply log back in using the method described earlier.
+This menu allows you to change some of your Pi's configurations. We recommend both changing your password and expanding the Filesystem (go into `"Advanced Options" ->  "Expand Filesystem"`). Once complete, reboot your Pi by typing `sudo reboot`.
 
-Now, we need to make sure that all of the software installed on Raspbian is up-to-date by typing the following commands into your console:
+Next, make sure that all of the software installed on Raspbian is up-to-date. Type the following commands into your console:
 
 ```
 sudo apt-get update
@@ -25,32 +25,35 @@ sudo apt-get upgrade
 ```
 
 ## Step 2: Installation of Apache & PHP
-To install the Apache web server and PHP, type `sudo apt-get install apache2 php5` into your terminal and click enter. It will list out the packages it intends to download and install, and then it will ask you if you'd like to download all of the packages. Type in "y" for yes and click enter.
+The next step is to install both PHP and the Apache web server onto your Pi. In your terminal, type: `sudo apt-get install apache2 php5`. This command will list out the packages it intends to download, and then asks you to confirm. Type in "y" for yes and click enter.
 
-Next, you'll want to change the ownership of the folders that contain your website's files. To do this, type:
+Next, change the ownership of the folders that contain your website's files by typing: 
 ```
 sudo chown -R pi /var/www
 sudo chgrp -R pi /var/www
 ```
-To check if Apache is working, go to your favorite web browser and type in "[http://pi.local](http://pi.local)" (or the IP address of your pi, if you know it). It should display a basic page with the title "Apache2 Debian Default Page." For future reference, the page you see is located in `/var/www/html/index.htm. Note: this page is only accessible on your local wifi network. We will explain how to make it accessible on the web in steps 3 and 4.
+
+To check if Apache is working, go to your favorite web browser and type in "[http://pi.local](http://pi.local)" (or the IP address of your pi, found in Step 3). It should display a basic page with the title "Apache2 Debian Default Page." For future reference, the location of this page on your Pi is `/var/www/html/index.htm`. (Note: at this stage, this page is only accessible on your local wifi network. We will explain how to make it available to the public in Steps 3 and 4).
 
 ## Step 3: Router Configuration
-The next step is to find the local IP address that your router assigned to your Raspberry Pi. To do this, we're going to use an application called [Angry IP Scanner](http://angryip.org/). Download the application, open it, and click the start button. This application will scan IP addresses in the range `10.0.1.0-255` by default, but if your router uses another format for subnet (`172.16.X.X` or `192.168.X.X`) simply change the range. After scanning, locate the device with the hostname "pi.local" and note it's IP address and MAC address.
+The next step is to find your Pi's local IP address. To do this, download an application called [Angry IP Scanner](http://angryip.org/). This application will scan your router's LAN IP addresses in the range `10.0.1.0`  to ` 0.0.1.255` (if your router uses `172.16.X.X` or `192.168.X.X` for it's subnet you might need to adjust the range). After scanning, locate the entry with the hostname "pi.local" and note both it's IP address and MAC address.
 
-Then, open up your router's configuration. For the purpose of this tutorial, we'll be using Apple's Airport Utility. Click on your router and select the edit button. Enter your password and then find the "Network" tab.
+Then, open up your router's configuration. This tutorial uses [Apple's Airport Utility](https://support.apple.com/kb/dl1547?locale=en_US) on an Apple router. Click on your router and select the edit button. 
 
-The first thing we're going to add is a DHCP reservation. This allows the router to assign a specific IP address to a device every time it connects to the network. Under the DHCP reservations section, click the "+" button and fill in the information noted from the pi.local entry in Angry IP Scanner.
+Navigate to the "Network" tab and find the DHCP reservations. DHCP reservations essentially reserve a specific IP address in your router to a specific MAC address. This way whenever your Pi connects to the router, it will use the same local IP address. Under the DHCP reservations section, click the "+" button and fill in the information noted from the "pi.local" entry of your Angry IP Scanner result.
 
-Next, we're going to open up two ports to allow people to access your website from any location, not just your home network! To do this, click "+" under Port Settings. Both the public and private UDP and TCP ports for the first entry should be "80" (the default port for Apache). The private IP address is the Pi's IP (aka the IP you just made a DHCP reservation for).
+Then you need to open a port to allow people to access your website from outside your local network. Under "Port Settings," click the "+" button. Both the public and private UDP and TCP ports should be "80" (the default port for Apache). The private IP address you assigned the Pi in the DHCP reservation.
 
-To check if port forwarding is enabled, enter your home IP address in a device outside of your home network and see if the default Apache start page loads.
+To check if port forwarding is enabled, enter your home IP address in a device outside of your local network. It should load the default Apache page. (This is how the internet _really_ works, domain names hide everything!) 
 
-## Step 4: Setup Dynamic DNS (with Google Domains)
-Once your website is accessible by the outside world, you're ready to setup a custom domain name! For this tutorial, we're using [Google Domains](https://domains.google.com/) because of their awesome Dynamic DNS feature. Most people are assigned an IP address from their internet service provider, and that IP can change from time to time. A Dynamic DNS service allows users to link a domain to a non-static IP address.
+## Step 4: Setup a custom domain using Google Domains' Dynamic DNS
+This step uses [Google Domains](https://domains.google.com) to purchase a custom domain name and use Google's Dynamic DNS service. A .com domain with Google Domains is around $12/month (USD).  
 
-The .com TLD on Google Domains is around $12/year, and Dynamic DNS is included for free. After purchasing a domain, go to the "Configure DNS" tab of that domain's management panel. Scroll down to "Synthetic records" and in the dropdown change "Subdomain forward" to "Dynamic DNS." For the base url (http://yoururl.com), put "@" in the input area preceding your domain name and add the record. Then, expand information on the record by clicking the arrow beside where it says "Dynamic DNS." Then click "View credentials" and note the username and password in the grey text box.
+If you're like me and your IP address is at the mercy of your ISP, you need to use Google Domain's DynamicDNS service. We're going to create a file that your Pi will run hourly, telling Google Domains what the current IP address of your home network is. 
 
-Next, we're going to setup a command line file on the server to tell Google Domains what the current IP of your home network is. To do this, create a file in the root directory of your Raspberry Pi by typing the following command: `sudo nano ~/dns_update.sh`. In the file, copy/paste the following information:
+After purchasing a domain, go to the "Configure DNS" tab of the domain's management panel. Find the "Synthetic records" section and, in the drop-down menu button, change "Subdomain forward" to "Dynamic DNS." For the base URL (ex: http://YOURDOMAIN.com), put "@" in the input area preceding the base URL. Once you add the record, view more information about it by clicking the arrow beside the bold "Dynamic DNS" title. Then click "View credentials" and note the username and password in the grey text box.
+
+Next, create an executable .sh file on the Pi to tell Google Domains the current IP address of your network. To create the file, type: `sudo nano ~/dns_update.sh`. In the file, copy/paste the following information, replacing `USERNAME` and `PASSWORD` with the credentials noted in the Google Domains Dynamic DNS record entry:
 
 ```
 wget https://USERNAME:PASSWORD@domains.google.com/nic/update?hostname=YOURDOMAIN.com -qO dns_update_results.txt
@@ -58,14 +61,16 @@ wget https://USERNAME:PASSWORD@domains.google.com/nic/update?hostname=www.YOURDO
 echo " Last run: `date`" >> dns_update_results.txt
 ```
 
-Then, make sure the file is executable by typing in the following command: `chmod +x ~/dns_update.sh`.
+Then, make sure the file is executable by typing: `chmod +x ~/dns_update.sh`. To execute the file, type `./dns_update.sh`. Check the Dynamic DNS record entry in your Google Domains management panel. You should see the IP address of your home network. If it's still `0.0.0.0`, stop here and restart this step.
 
-Next, we need to setup a cronjob for the file. A cronjob is a way to schedule when to run an executable file. We're going to tell the Raspberry Pi to run the file every hour. First, type in crontab -e and add the following entry: `0 * * * * ~/dns_update.sh`. To save the file, type `Ctrl + X` and follow the prompt.
+The next thing you need to do is setup a cronjob to execute the `dns_update.sh` file every hour.  Type `crontab -e` and add the following entry: `0 * * * * ~/dns_update.sh`. To save the file, type `Ctrl + X` and follow the prompt.
 
 ## Step 5: Setup a Virtual Host with Apache
-Now that you have the domain pointing to your Raspberry Pi, it's time to tell Apache what to do with the custom domain. We're going to create what's known as a Virtual Host, which is basically a domain name used in place of an IP address.
+Now that you have the domain pointing to your Raspberry Pi, you should create a virtual host record for your domain in Apache's configuration. 
 
-First, we're going to create a configuration file for the domain. In your console, type: `sudo nano /etc/apache2/sites-available/YOURDOMAIN.conf`. In the file, add the following lines:
+To create and edit the configuration file, type: `sudo nano /etc/apache2/sites-available/YOURDOMAIN.conf`. 
+
+In the file, add the following lines:
 
 ```
 <VirtualHost *:80>
@@ -74,16 +79,16 @@ First, we're going to create a configuration file for the domain. In your consol
     DocumentRoot /var/www/YOURDOMAIN
 </VirtualHost>
 ```
-Save the file by typing Ctrl + X and following the prompt. Then, create the folder for the website's root: `sudo mkdir /var/www/YOURDOMAIN`.
+Save the file by typing `Ctrl + X` and following the prompt. Then, create the folder for the website's root: `sudo mkdir /var/www/YOURDOMAIN`.
 
-And, again, we'll need to change the permissions for these folders so you can edit files inside them:
+And, again, we'll need to change the permissions for these folders so your user can edit the files inside:
 
 ```
 sudo chown -R pi /var/www/YOURDOMAIN 
 sudo chgrp -R pi /var/www/YOURDOMAIN
 ```
 
-For the last step, we need to activate the virtual host entry and then restart Apache's services:
+Lastly, you need to register the virtual host entry with Apache and then restart Apache's services:
 
 ```
 sudo a2ensite YOURDOMAIN 
@@ -91,9 +96,18 @@ sudo service apache2 reload
 ```
 
 ## Finished! 
-Congratulations! You now have a custom domain and working website! To upload files to the server, download a File-Transfer Protocol (FTP) client like [Cyberduck](https://cyberduck.io/). Enter `YOURDOMAIN` as the server, `pi` as the username, `password` (or whatever you changed the password to) as the password, and use SFTP port 22. 
+Congratulations! You're now ready to upload your website on the internet! To upload files onto your Pi, download a File-Transfer Protocol (FTP) client (like [Cyberduck](https://cyberduck.io/)).
 
-Other tutorials: 
-* [Install SSL certificates using LetsEncrypt](http://pimylifeup.com/raspberry-pi-ssl-lets-encrypt/)
-* [Install a OpenVPN server on your Pi](https://www.youtube.com/watch?v=WA7QTM9hovQ) (video)
-* [Install a OwnCloud cloud server](https://www.youtube.com/watch?v=RNehg6AKCiM) (video)
+__Login Information:__
+
+* Server Name: `YOURDOMAIN`
+* Username: `pi`
+* Password: `password` (or whatever you changed it to)
+* Port: 22 (SFTP)
+
+
+__Other Tutorials for the Pi:__
+
+* [Raspberry Pi SSL Certificates using Let’s Encrypt](http://pimylifeup.com/raspberry-pi-ssl-lets-encrypt/)
+* [OpenVPN Server Raspberry Pi with PiVPN](https://www.youtube.com/watch?v=WA7QTM9hovQ) (video)
+* [Raspberry Pi Owncloud WD Red Diet Pi](https://www.youtube.com/watch?v=RNehg6AKCiM) (video)
