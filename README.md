@@ -3,7 +3,7 @@ This guide will show you how to set up a [Raspberry Pi](https://www.raspberrypi.
 
 
 ## Step 1: Raspbian Installation & Configuration
-The first step in this tutorial is to flash Raspberry Pi's version of Linux onto an SD card. You'll use this SD card to store your PI's operating system. The first thing you need is an application called Etcher](https://etcher.io/) (Windows and MacOS). After downloading Etcher, you also need to download [Raspbian Stretch Lite](https://www.raspberrypi.org/downloads/raspbian/).
+The first step in this tutorial is to flash Raspberry Pi's version of Linux onto an SD card. You'll use this SD card to store your PI's operating system. The first thing you need is an application called [Etcher](https://etcher.io/) (Windows and MacOS). After downloading Etcher, you also need to download [Raspbian Stretch Lite](https://www.raspberrypi.org/downloads/raspbian/).
 
 The next step is to plug your SD card into your computer and open up Etcher. Select the .img file downloaded from the Raspberry Pi website as the image you want to flash. For the drive, select the SD card you just plugged in. Then click "Flash!" and wait for the process to complete.
 
